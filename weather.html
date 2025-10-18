@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+            display: flex;
+            align-items: center;
+        }
+        .container{
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 25px;
+            border: 1px solid black;
+            background-color: white;
+            width: 30vw;
+        }
+
+        #city-name {
+            border: none;
+            border-bottom: 2px solid black;
+            margin-right: 5px;
+            padding-left: 0.5vw;
+            padding-right: 0.5vw;
+        }
+
+        .title {
+            color: teal;
+            font-size: 5vh;
+            font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .result-container {
+            margin: auto;
+            margin-top: 5vw;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Weather App</h1>
+        <form id="form" class="parent-container">
+            <input id="city-name" type="text" placeholder="Enter city name"/>
+            <button id="submit">Submit</button>
+        </form>
+        <div id="result" class="result-container">
+            
+        </div>
+    </div>
+    <script>
+        var form = document.getElementById("form");
+        var result = document.getElementById("result");
+        var cityName = document.getElementById("city-name");
+        var apiKey = "7fa29221b6896ddb8eac1c289c2d7508";
+        form.addEventListener("submit",(e)=>{
+            e.preventDefault()
+            var apiurl=`https://api.openweathermap.org/data/2.5/weather?q=${cityName.value}&appid=${apiKey}&units=metric` 
+            fetch(apiurl)
+                .then((res)=>{
+                    console.log(res)
+                    return res.json()
+                })
+                .then((res)=>{
+                    if(res.cod=="404"){
+                        alert("City not found!");
+                    }
+                    var weatherData = {
+                        temp: res.main.temp,
+                        country: res.sys.country,
+                        city: res.name
+                    };
+                    displayResult(weatherData)
+                })
+        })
+
+        const displayResult = (data) => {
+            result.innerHTML = `<p>Temperature: ${data.temp}</p><p>Country: ${data.country}</p><p>City: ${data.city}</p>`;
+        }
+    </script>
+</body>
+</html>
